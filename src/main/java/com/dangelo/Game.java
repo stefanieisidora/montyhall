@@ -11,13 +11,13 @@ public class Game {
         this.doorProvider = doorProvider;
     }
 
-    public boolean run() {
+    boolean run() {
         var winningDoor = doorProvider.getWinningDoor();
         if (switchDoors) {
             this.chosenDoor = doorProvider.switchDoor(chosenDoor, winningDoor);
         }
 
-        return winningDoor.getId().equals(chosenDoor.getId());
+        return winningDoor.equals(chosenDoor);
     }
 
 

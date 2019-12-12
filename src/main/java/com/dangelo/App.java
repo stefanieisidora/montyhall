@@ -4,18 +4,18 @@ import java.util.stream.IntStream;
 
 public class App {
 
-    public static final int NUMBER_OF_GAMES = 1000;
+    private static final int NUMBER_OF_GAMES = 1000;
 
     public static void main(String[] args) {
-        System.out.println("The game will run 1000 times, a box will be randomly chosen");
+        System.out.println("The game will run 1000 times, a door will be randomly chosen");
         var doorProvider = new DoorProvider();
         var chosenDoor = doorProvider.getRandomDoor();
         System.out.println("Door " + chosenDoor + " was chosen");
 
-        System.out.println("The result if you chose to switch door:");
+        System.out.println("Result of simulation where you choose to always switch door:");
         playMontyHall(true, doorProvider, chosenDoor);
 
-        System.out.println("The result if you chose to not switch door:");
+        System.out.println("Result of simulation where you choose to never switch door:");
         playMontyHall(false, doorProvider, chosenDoor);
     }
 
