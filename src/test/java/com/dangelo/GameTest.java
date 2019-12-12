@@ -24,21 +24,21 @@ class GameTest {
 
     @ParameterizedTest
     @MethodSource("createSwitchingTestData")
-    void whenSwitchingDoor(String choosenDoor, String winningDoor, String nextDoor, boolean expectedResult) {
+    void whenSwitchingDoor(Door chosenDoor, Door winningDoor, Door nextDoor, boolean expectedResult) {
         when(doorProviderMock.getWinningDoor()).thenReturn(winningDoor);
-        when(doorProviderMock.switchDoor(any())).thenReturn(nextDoor);
+        when(doorProviderMock.switchDoor(any(), any())).thenReturn(nextDoor);
 
-        var game = new Game(choosenDoor, true, doorProviderMock);
+        var game = new Game(chosenDoor, true, doorProviderMock);
         boolean wonOrNot = game.run();
         assertThat(wonOrNot).isEqualTo(expectedResult);
     }
 
     @ParameterizedTest
     @MethodSource("createNotSwitchingTestData")
-    void whenNotSwitchingDoor(String choosenDoor, String winningDoor, boolean expectedResult) {
+    void whenNotSwitchingDoor(Door chosenDoor, Door winningDoor, boolean expectedResult) {
         when(doorProviderMock.getWinningDoor()).thenReturn(winningDoor);
 
-        var game = new Game(choosenDoor, false, doorProviderMock);
+        var game = new Game(chosenDoor, false, doorProviderMock);
         boolean wonOrNot = game.run();
         assertThat(wonOrNot).isEqualTo(expectedResult);
     }
@@ -46,16 +46,16 @@ class GameTest {
 
     private static Stream<Arguments> createSwitchingTestData() {
         return Stream.of(
-                Arguments.of("A", "A", "B", false),
-                Arguments.of("A", "B", "B", true),
-                Arguments.of("A", "B", "C", false)
+                Arguments.of(new Door("A"), new Door("A"), new Door("B"), false),
+                Arguments.of(new Door("A"), new Door("B"), new Door("B"), true),
+                Arguments.of(new Door("A"), new Door("B"), new Door("C"), false)
         );
     }
 
     private static Stream<Arguments> createNotSwitchingTestData() {
         return Stream.of(
-                Arguments.of("A", "A", true),
-                Arguments.of("A", "B", false)
+                Arguments.of(new Door("A"), new Door("A"), true),
+                Arguments.of(new Door("A"), new Door("B"), false)
         );
     }
 

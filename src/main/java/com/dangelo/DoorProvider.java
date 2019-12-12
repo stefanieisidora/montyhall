@@ -7,21 +7,43 @@ import java.util.stream.Collectors;
 
 public class DoorProvider {
     private Random random;
-    public static final int NUMBER_OF_DOORS = 3;
-    public static final List<String> ALL_DOORS = Arrays.asList("A", "B", "C");
+    private static final int NUMBER_OF_DOORS = 3;
+    private final List<Door> allDoors = Arrays.asList(
+            new Door("A"),
+            new Door("B"),
+            new Door("C"));
 
     public DoorProvider() {
         this.random = new Random();
     }
-    public String getWinningDoor(){
-        return ALL_DOORS.get(random.nextInt(NUMBER_OF_DOORS));
+    public Door getWinningDoor(){
+        return allDoors
+                .stream()
+                .collect(Collectors.toList())
+                .get(random.nextInt(NUMBER_OF_DOORS));
     }
 
-    public String switchDoor(String choosenDoor) {
-        var remainingDoors = ALL_DOORS
+    public Door switchDoor(Door chosenDoor, Door winningDoor) {
+        var openedDoor = openDoor(chosenDoor, winningDoor);
+        var remainingDoor = allDoors
                 .stream()
-                .filter(door -> !door.equals(choosenDoor))
-                .collect(Collectors.toList());
-        return remainingDoors.get(random.nextInt(NUMBER_OF_DOORS - 1));
+                .filter(door -> !door.getId().equals(chosenDoor.getId())
+                        && !door.getId().equals(openedDoor.getId()) )
+                .collect(Collectors.toList()).get(0);
+        return remainingDoor;
+    }
+
+    private Door openDoor(Door chosenDoor, Door winningDoor) {
+        return allDoors
+                .stream()
+                .filter(door -> !door.getId().equals(chosenDoor.getId()) && !door.getId().equals(winningDoor.getId()))
+                .findAny()
+                .get();
+    }
+
+    public Door getRandomDoor() {
+        return allDoors.stream()
+                .collect(Collectors.toList())
+                .get(random.nextInt(NUMBER_OF_DOORS));
     }
 }
